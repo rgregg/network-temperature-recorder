@@ -11,7 +11,7 @@ namespace TemperatureRecorderConsoleApp
             DirectoryInfo devicesDir = new DirectoryInfo("/sys/bus/w1/devices");
             if (!devicesDir.Exists)
             {
-                Console.WriteLine($"Unable to locate device directory: {devicesDir.FullName}");
+                Console.WriteLine(string.Format("Unable to locate device directory: {0}", devicesDir.FullName));
                 return;
             }
 
@@ -31,7 +31,7 @@ namespace TemperatureRecorderConsoleApp
                     var sourceDataFile = deviceDir.GetFiles("w1_slave").FirstOrDefault();
                     if (null == sourceDataFile)
                     {
-                        Console.WriteLine($"Unable to file w1_slave for device {deviceDir.Name}");
+                        Console.WriteLine(string.Format("Unable to file w1_slave for device {0}", deviceDir.Name));
                         continue;
                     }
 
@@ -44,11 +44,11 @@ namespace TemperatureRecorderConsoleApp
                     string temptext = dataText.Split(new string[] { "t=" }, StringSplitOptions.RemoveEmptyEntries)[1];
                     double temp_C = double.Parse(temptext) / 1000;
                     double temp_F = temp_C * 9.0 / 5.0 + 32.0;
-                    Console.WriteLine($"Device {deviceDir.Name} reports temperature: {temp_C}C, {temp_F}F");
+                    Console.WriteLine(string.Format("Device {0} reports temperature: {1}C, {2}F", deviceDir.Name, temp_C, temp_F));
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error reading data from probe {deviceDir.Name}: {ex.Message}");
+                    Console.WriteLine(string.Format("Error reading data from probe {0}: {1}", deviceDir.Name, ex.Message));
                 }
             }
         }
