@@ -25,6 +25,14 @@ namespace TemperatureRecorderConsoleApp
         {
             this.Config = config;
             Console.WriteLine("Recording data to OneDrive for Business: " + config.CloudDataFilePath);
+
+            System.Net.ServicePointManager.ServerCertificateValidationCallback += 
+                delegate (object sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+                                   System.Security.Cryptography.X509Certificates.X509Chain chain,
+                                   System.Net.Security.SslPolicyErrors sslPolicyErrors)
+           {
+               return true; // **** Always accept
+           };
         }
 
         public async Task RecordDataAsync(TemperatureData data)
@@ -53,16 +61,23 @@ namespace TemperatureRecorderConsoleApp
             {
                 request.Headers.TryAddWithoutValidation("workbook-session-id", sessionId);
             }
-            request.Content = GetJsonObjectContent(new { values = new object[] { new object[] { data.InstanceDateTime.ToString("G"), data.TemperatureC, data.TemperatureF } } });
+            var dateString = data.InstanceDateTime.ToString("MM/dd/yyyy HH:mm:ss");
+            request.Content = GetJsonObjectContent(new { values = new object[] { new object[] { dateString, data.TemperatureC, data.TemperatureF } } });
 
-            var response = await client.SendAsync(request);
-            if (response.StatusCode != System.Net.HttpStatusCode.Created)
+            try 
             {
-                var error = await ParseResponseAsync<Graph.ErrorResponse>(response);
-                if (null != error)
+                var response = await client.SendAsync(request);
+                if (response.StatusCode != System.Net.HttpStatusCode.Created)
                 {
-                    Console.WriteLine("Error appending data: " + error.Error.Code);
+                    var error = await ParseResponseAsync<Graph.ErrorResponse>(response);
+                    if (null != error)
+                    {
+                        Console.WriteLine("Error appending data: " + error.Error.Code);
+                    }
                 }
+            } catch (Exception ex) {
+                Console.WriteLine("Exception occured while uploading: " + ex.Message);
+                Console.WriteLine(ex.ToString());
             }
         }
 
