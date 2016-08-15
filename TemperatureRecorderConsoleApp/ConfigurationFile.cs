@@ -19,7 +19,6 @@ namespace TemperatureRecorderConsoleApp
 
         public string DataRecorder { get; set; }
         public string TemperatureSource { get; set; }
-
         public string CloudDataFilePath { get; set; }
         public string Office365UserName { get; set; }
         public string Office365Password { get; set; }
