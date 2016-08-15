@@ -28,6 +28,20 @@ To use the temperature recorder with OneDrive for Business, follow the following
    This application uses the username+password flow instead of a traditional OAuth flow since it works as a command line utility and cannot use a web interface.
 3. If you are using Mono, ensure that the SSL certificates used by `logon.microsoftonline.com` and `graph.microsoft.com` are trusted by Mono. See [Mono FAQ: security](http://www.mono-project.com/docs/faq/security/) for more information.
 
+### Example Excel file
+
+To record data to Excel, you need to create an Excel file that will hold the data. The tool will write the data values into a table named `RecordedData`.
+This table is expected to contain the following columns, in order:
+
+* Date and Time
+* Temperature (Celsius)
+* Temperature (Fahrenheit)
+
+Additional columns can be added to the table after these first three, since the app only expects these columns.
+The name of the column is not important, only that they are in the correct order.
+
+See [ExampleData](ExampleData.xlsx) for an example of the required file format.
+
 ## Configuration File
 
 The temperature recorder app looks for a default configuration file at `~/.iotTempRecorder.rc`.
@@ -45,7 +59,7 @@ The format of this file is a JSON dictionary that can contain the following prop
 | Office365TokenService | String | The token authority for authentication. Should specify `https://login.microsoftonline.com/common`. |
 | Office365ResourceUrl | String | The resource URI to generate tokens for. Should specify `https://graph.microsoft.com`. |
 
-### Example file
+### Example configuration file
 
 ```json
 {
