@@ -62,10 +62,10 @@
             IDataRecorder recorder;
             switch (config.DataRecorder)
             {
-                case "Console":
+                case ConfigurationFile.DataRecorderServices.Console:
                     recorder = new ConsoleDataRecorder();
                     break;
-                case "Office365":
+                case ConfigurationFile.DataRecorderServices.Office365:
                     recorder = new Office365DataRecorder(config);
                     break;
                 default:
@@ -80,10 +80,10 @@
             ITemperatureReader reader;
             switch (config.TemperatureSource)
             {
-                case "OneWire":
+                case ConfigurationFile.TemperatureSources.OneWire:
                     reader = new OneWireProbeReader();
                     break;
-                case "Simulator":
+                case ConfigurationFile.TemperatureSources.Simulator:
                     reader = new ProbeSimulator();
                     break;
                 default:
