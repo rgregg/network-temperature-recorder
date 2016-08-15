@@ -24,7 +24,7 @@ namespace TemperatureRecorderConsoleApp
         public Office365DataRecorder(ConfigurationFile config)
         {
             this.Config = config;
-            Console.WriteLine("Recording data to OneDrive for Business: " + config.CloudDataFilePath);
+            Program.LogMessage("Recording data to OneDrive for Business: " + config.CloudDataFilePath);
 
             System.Net.ServicePointManager.ServerCertificateValidationCallback += 
                 delegate (object sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate,
