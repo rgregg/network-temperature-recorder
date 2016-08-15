@@ -3,6 +3,9 @@
 This project implements a simple console application that reads temperature values from a supported reader, and records the value out to a supported recorder.
 It is designed to be run from an embedded device, like a Raspberry Pi, and left running to continiously monitor temperature.
 
+![screenshot of Excel Online showing data recorded](doc-resources/excel-screenshot.png)
+
+
 ### Supported temperature readers
 
 * [One wire digital temperature sensors (like DS18B20)](#one-wire-hardware-configuration)
