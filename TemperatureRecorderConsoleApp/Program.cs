@@ -8,16 +8,12 @@ namespace TemperatureRecorderConsoleApp
     {
         static void Main(string[] args)
         {
+            var config = ConfigurationFile.ReadDefault();
 
-            int pauseBetweenReadings = 5000;
-            if (args.Length > 0)
-            {
-                var newPauseValue = Int32.Parse(args[0]);
-                if (newPauseValue > 0)
-                    pauseBetweenReadings = newPauseValue * 1000;
-            }
+            ITemperatureReader reader = GetTemperatureReader(config);
+            IDataRecorder recorder = GetDataRecorder(config);
 
-            var probes = OneWireProbeReader.EnumerateDevices();
+            var probes = reader.EnumerateDevices();
             if (probes.Length == 0)
             {
                 Console.WriteLine("Unable to locate any devices. Aborting.");
@@ -28,16 +24,57 @@ namespace TemperatureRecorderConsoleApp
             {
                 foreach (var probe in probes)
                 {
-                    var data = OneWireProbeReader.GetAverageValueFromDevice(probe, 5, 10);
-                    if (null != data)
+                    try
                     {
-                        Console.WriteLine(data.ToString());
+                        var data = reader.GetAverageValueFromDevice(probe, 5);
+                        if (null != data)
+                        {
+                            recorder.RecordDataAsync(data);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Exception occured: " + ex.Message);
                     }
                 }
-                System.Threading.Thread.Sleep(pauseBetweenReadings);
+                System.Threading.Thread.Sleep(config.TemperaturePollingIntervalSeconds * 1000);
             }
         }
 
-     
+        private static IDataRecorder GetDataRecorder(ConfigurationFile config)
+        {
+            IDataRecorder recorder;
+            switch (config.DataRecorder)
+            {
+                case "Console":
+                    recorder = new ConsoleDataRecorder();
+                    break;
+                case "Office365":
+                    recorder = new Office365DataRecorder(config);
+                    break;
+                default:
+                    throw new NotSupportedException("DataRecorder value not supported.");
+            }
+
+            return recorder;
+        }
+
+        private static ITemperatureReader GetTemperatureReader(ConfigurationFile config)
+        {
+            ITemperatureReader reader;
+            switch (config.TemperatureSource)
+            {
+                case "OneWire":
+                    reader = new OneWireProbeReader();
+                    break;
+                case "Simulator":
+                    reader = new ProbeSimulator();
+                    break;
+                default:
+                    throw new NotSupportedException("TemperatureSource value not supported.");
+            }
+
+            return reader;
+        }
     }
 }

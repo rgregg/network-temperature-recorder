@@ -6,11 +6,11 @@ using System.Text;
 
 namespace TemperatureRecorderConsoleApp
 {
-    public static class OneWireProbeReader
+    public class OneWireProbeReader : ITemperatureReader
     {
         public static string DevicesDirectory = "/sys/bus/w1/devices";
 
-        public static string[] EnumerateDevices()
+        public string[] EnumerateDevices()
         {
             var devicesDir = new DirectoryInfo(DevicesDirectory);
             if (!devicesDir.Exists)
@@ -23,7 +23,7 @@ namespace TemperatureRecorderConsoleApp
             return (from d in knownDevices select d.Name).ToArray();
         }
 
-        public static TemperatureData GetValueFromDevice(string deviceId)
+        public TemperatureData GetValueFromDevice(string deviceId)
         {
             var deviceDir = new DirectoryInfo(Path.Combine(DevicesDirectory, deviceId));
             if (!deviceDir.Exists)
@@ -57,15 +57,15 @@ namespace TemperatureRecorderConsoleApp
         /// <param name="seconds"></param>
         /// <param name="measurements"></param>
         /// <returns></returns>
-        public static TemperatureData GetAverageValueFromDevice(string deviceId, double seconds, double measurements)
+        public TemperatureData GetAverageValueFromDevice(string deviceId, double measurements)
         {
-	    Console.WriteLine();
-            int sleepTimer = (int)((seconds / measurements) * 1000.0);
+	        Console.WriteLine();
+            const int sleepTimer = 500;
             List<TemperatureData> recordedValues = new List<TemperatureData>();
             for (int i = 0; i < measurements; i++)
             {
                 Console.Write(".");
-		var data = OneWireProbeReader.GetValueFromDevice(deviceId);
+		        var data = GetValueFromDevice(deviceId);
                 if (null != data)
                     recordedValues.Add(data);
                 System.Threading.Thread.Sleep(sleepTimer);
@@ -86,34 +86,5 @@ namespace TemperatureRecorderConsoleApp
     }
 
 
-    public class TemperatureData
-    {
-        public DateTimeOffset InstanceDateTime { get; private set; }
-        public string DeviceIdentifier { get; private set; }
-        public double TemperatureC { get; private set; }
-        public double TemperatureF
-        {
-            get
-            {
-                return TemperatureC * 9.0 / 5.0 + 32.0;
-            }
-        }
-
-        public TemperatureData(DateTimeOffset time, string device, double tempC)
-        {
-            this.InstanceDateTime = time;
-            this.DeviceIdentifier = device;
-            this.TemperatureC = tempC;
-        }
-
-        public override string ToString()
-        {
-            return string.Format(
-                "{3}: Device {0} reports temperature: {1}C, {2}F", 
-                DeviceIdentifier,
-                TemperatureC,
-                TemperatureF,
-                InstanceDateTime);
-        }
-    }
+   
 }
