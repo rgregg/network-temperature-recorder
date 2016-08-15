@@ -31,7 +31,7 @@ namespace TemperatureRecorderConsoleApp
                     var data = OneWireProbeReader.GetAverageValueFromDevice(probe, 5, 10);
                     if (null != data)
                     {
-                        Console.Write(data.ToString());
+                        Console.WriteLine(data.ToString());
                     }
                 }
                 System.Threading.Thread.Sleep(pauseBetweenReadings);

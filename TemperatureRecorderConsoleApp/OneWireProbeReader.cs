@@ -59,16 +59,18 @@ namespace TemperatureRecorderConsoleApp
         /// <returns></returns>
         public static TemperatureData GetAverageValueFromDevice(string deviceId, double seconds, double measurements)
         {
+	    Console.WriteLine();
             int sleepTimer = (int)((seconds / measurements) * 1000.0);
             List<TemperatureData> recordedValues = new List<TemperatureData>();
             for (int i = 0; i < measurements; i++)
             {
-                var data = OneWireProbeReader.GetValueFromDevice(deviceId);
+                Console.Write(".");
+		var data = OneWireProbeReader.GetValueFromDevice(deviceId);
                 if (null != data)
                     recordedValues.Add(data);
                 System.Threading.Thread.Sleep(sleepTimer);
             }
-
+            Console.WriteLine();
             if (recordedValues.Count > 0)
             {
                 double averageTemperature = 0;
