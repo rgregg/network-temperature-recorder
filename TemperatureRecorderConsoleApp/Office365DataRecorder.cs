@@ -40,7 +40,7 @@ namespace TemperatureRecorderConsoleApp
             var haveAccessToken = await RetrieveAccessToken();
             if (!haveAccessToken)
             {
-                Console.WriteLine("Unable to record data point. No access token.");
+                Program.LogMessage("Unable to record data point. No access token.");
                 return;
             }
 
@@ -51,7 +51,7 @@ namespace TemperatureRecorderConsoleApp
 
         private async Task AppendDataToTableAsync(string sessionId, TemperatureData data)
         {
-            Console.WriteLine(data.ToString());
+            Program.LogMessage(data.ToString());
 
             var client = GetHttpClient();
             var requestUri = new Uri(BaseUri, "/v1.0/me/drive/root:/" + Uri.EscapeUriString(Config.CloudDataFilePath) + ":/workbook/tables('RecordedData')/Rows");
@@ -72,12 +72,12 @@ namespace TemperatureRecorderConsoleApp
                     var error = await ParseResponseAsync<Graph.ErrorResponse>(response);
                     if (null != error)
                     {
-                        Console.WriteLine("Error appending data: " + error.Error.Code);
+                        Program.LogMessage("Error appending data: " + error.Error.Code);
                     }
                 }
             } catch (Exception ex) {
-                Console.WriteLine("Exception occured while uploading: " + ex.Message);
-                Console.WriteLine(ex.ToString());
+                Program.LogMessage("Exception occured while uploading: " + ex.Message);
+                Program.LogMessage(ex.ToString());
             }
         }
 
@@ -158,7 +158,7 @@ namespace TemperatureRecorderConsoleApp
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to retrieve new access token:" + ex.Message);
+                Program.LogMessage("Unable to retrieve new access token:" + ex.Message);
                 return false;
             }
         }

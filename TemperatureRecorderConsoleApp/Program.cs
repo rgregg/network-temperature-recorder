@@ -1,22 +1,30 @@
-﻿using System;
-using System.Linq;
-using System.IO;
-
-namespace TemperatureRecorderConsoleApp
+﻿namespace TemperatureRecorderConsoleApp
 {
+    using System;
+    using CommandLine;
+
     class Program
     {
+        private static ConfigurationFile Config;
         static void Main(string[] args)
         {
-            var config = ConfigurationFile.ReadDefault();
+            var options = new CommandLineArgs();
+            if (!Parser.Default.ParseArguments(args, options))
+            {
+                Program.LogMessage("Unable to parse command line options.");
+                return;
+            }
 
-            ITemperatureReader reader = GetTemperatureReader(config);
-            IDataRecorder recorder = GetDataRecorder(config);
+            Config = ConfigurationFile.ReadDefault();
+            Config.Quiet = options.Quiet;
+
+            ITemperatureReader reader = GetTemperatureReader(Config);
+            IDataRecorder recorder = GetDataRecorder(Config);
 
             var probes = reader.EnumerateDevices();
             if (probes.Length == 0)
             {
-                Console.WriteLine("Unable to locate any devices. Aborting.");
+                Program.LogMessage("Unable to locate any devices. Aborting.");
                 return;
             }
 
@@ -34,11 +42,19 @@ namespace TemperatureRecorderConsoleApp
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("Exception occured: " + ex.Message);
+                        Program.LogMessage("Exception occured: " + ex.Message);
                     }
                 }
-                System.Threading.Thread.Sleep(config.TemperaturePollingIntervalSeconds * 1000);
+                System.Threading.Thread.Sleep(Config.TemperaturePollingIntervalSeconds * 1000);
             }
+        }
+
+        public static void LogMessage(string message)
+        {
+            if (null == Config || !Config.Quiet)
+                Console.WriteLine(message);
+            else
+                System.Diagnostics.Debug.WriteLine(message);
         }
 
         private static IDataRecorder GetDataRecorder(ConfigurationFile config)

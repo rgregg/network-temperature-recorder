@@ -15,7 +15,7 @@ namespace TemperatureRecorderConsoleApp
             var devicesDir = new DirectoryInfo(DevicesDirectory);
             if (!devicesDir.Exists)
             {
-                Console.WriteLine(string.Format("Unable to locate device directory: {0}", devicesDir.FullName));
+                Program.LogMessage(string.Format("Unable to locate device directory: {0}", devicesDir.FullName));
                 return new string[0];
             }
 
@@ -59,18 +59,15 @@ namespace TemperatureRecorderConsoleApp
         /// <returns></returns>
         public TemperatureData GetAverageValueFromDevice(string deviceId, double measurements)
         {
-	        Console.WriteLine();
             const int sleepTimer = 500;
             List<TemperatureData> recordedValues = new List<TemperatureData>();
             for (int i = 0; i < measurements; i++)
             {
-                Console.Write(".");
 		        var data = GetValueFromDevice(deviceId);
                 if (null != data)
                     recordedValues.Add(data);
                 System.Threading.Thread.Sleep(sleepTimer);
             }
-            Console.WriteLine();
             if (recordedValues.Count > 0)
             {
                 double averageTemperature = 0;

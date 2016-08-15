@@ -28,6 +28,12 @@ namespace TemperatureRecorderConsoleApp
         public string Office365ResourceUrl { get; set; }
         public string Office365RedirectUri { get; set; }
 
+        /// <summary>
+        /// Don't write to the console
+        /// </summary>
+        [JsonIgnore]
+        public bool Quiet { get; set; }
+
 
         public ConfigurationFile()
         {
@@ -46,7 +52,7 @@ namespace TemperatureRecorderConsoleApp
             var file = new FileInfo(Path.Combine(path, ".iotTempRecorder.rc"));
             if (!file.Exists)
             {
-                Console.WriteLine("Couldn't find configuration file: " + file.FullName);
+                Program.LogMessage("Couldn't find configuration file: " + file.FullName);
                 return new ConfigurationFile();
             }
 
