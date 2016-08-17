@@ -42,14 +42,14 @@ namespace TemperatureRecorderConsoleApp
             TemperaturePollingIntervalSeconds = 60;
         }
 
-        /// <summary>
-        /// Loads the default configuration file from ~/.iotTempRecorder.rc
-        /// </summary>
-        /// <returns></returns>
-        public static ConfigurationFile ReadDefault()
+	public static ConfigurationFile ReadFromPath(string path)
         {
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            var file = new FileInfo(Path.Combine(path, ".iotTempRecorder.rc"));
+            var file = new FileInfo(path);
+            return ReadFromFileInfo(file);   
+        }
+
+        private static ConfigurationFile ReadFromFileInfo(FileInfo file)
+        {
             if (!file.Exists)
             {
                 Program.LogMessage("Couldn't find configuration file: " + file.FullName);
@@ -61,6 +61,18 @@ namespace TemperatureRecorderConsoleApp
                 var config = JsonConvert.DeserializeObject<ConfigurationFile>(reader.ReadToEnd());
                 return config;
             }
+
+        }
+
+        /// <summary>
+        /// Loads the default configuration file from ~/.iotTempRecorder.rc
+        /// </summary>
+        /// <returns></returns>
+        public static ConfigurationFile ReadDefault()
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            var file = new FileInfo(Path.Combine(path, ".iotTempRecorder.rc"));
+            return ReadFromFileInfo(file);
         }
 
     }

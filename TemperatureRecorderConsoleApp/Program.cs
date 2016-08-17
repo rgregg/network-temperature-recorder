@@ -15,7 +15,10 @@
                 return;
             }
 
-            Config = ConfigurationFile.ReadDefault();
+	    if (!String.IsNullOrEmpty(options.ConfigurationFilePath))
+                Config = ConfigurationFile.ReadFromPath(options.ConfigurationFilePath);
+            else
+                Config = ConfigurationFile.ReadDefault();
             Config.Quiet = options.Quiet;
 
             ITemperatureReader reader = GetTemperatureReader(Config);
