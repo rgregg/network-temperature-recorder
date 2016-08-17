@@ -17,9 +17,8 @@ namespace TemperatureRecorderConsoleApp
         /// </summary>
         public int TemperaturePollingIntervalSeconds { get; set; }
 
-        public string DataRecorder { get; set; }
-        public string TemperatureSource { get; set; }
-
+        public DataRecorderServices DataRecorder { get; set; }
+        public TemperatureSources TemperatureSource { get; set; }
         public string CloudDataFilePath { get; set; }
         public string Office365UserName { get; set; }
         public string Office365Password { get; set; }
@@ -29,17 +28,18 @@ namespace TemperatureRecorderConsoleApp
         public string Office365RedirectUri { get; set; }
 
         /// <summary>
-        /// Don't write to the console
+        /// Don't write to the console if Quiet == true.
         /// </summary>
         [JsonIgnore]
         public bool Quiet { get; set; }
 
-
         public ConfigurationFile()
         {
-            DataRecorder = "Console";
-            TemperatureSource = "OneWire";
+            DataRecorder = DataRecorderServices.Console;
+            TemperatureSource = TemperatureSources.Simulator;
             TemperaturePollingIntervalSeconds = 60;
+            Office365TokenService = "https://login.microsoftonline.com/common";
+            Office365ResourceUrl = "https://graph.microsoft.com";
         }
 
 	public static ConfigurationFile ReadFromPath(string path)
@@ -73,6 +73,18 @@ namespace TemperatureRecorderConsoleApp
             var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             var file = new FileInfo(Path.Combine(path, ".iotTempRecorder.rc"));
             return ReadFromFileInfo(file);
+        }
+
+        public enum TemperatureSources
+        {
+            Simulator = 0,
+            OneWire = 1
+        }
+
+        public enum DataRecorderServices
+        {
+            Console = 0,
+            Office365 = 1
         }
 
     }
