@@ -26,6 +26,7 @@ namespace TemperatureRecorderConsoleApp
         public string Office365TokenService { get; set; }
         public string Office365ResourceUrl { get; set; }
         public string Office365RedirectUri { get; set; }
+        public string LogFilePath { get; set; }
 
         /// <summary>
         /// Don't write to the console if Quiet == true.
@@ -40,6 +41,7 @@ namespace TemperatureRecorderConsoleApp
             TemperaturePollingIntervalSeconds = 60;
             Office365TokenService = "https://login.microsoftonline.com/common";
             Office365ResourceUrl = "https://graph.microsoft.com";
+            LogFilePath = "~/.iotTempRecorder/output.txt";
         }
 
 	public static ConfigurationFile ReadFromPath(string path)

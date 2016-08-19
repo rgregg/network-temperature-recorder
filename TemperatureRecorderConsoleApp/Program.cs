@@ -6,6 +6,8 @@
     class Program
     {
         private static ConfigurationFile Config;
+        private static LogFileWriter LogWriter;
+
         static void Main(string[] args)
         {
             var options = new CommandLineArgs();
@@ -15,11 +17,20 @@
                 return;
             }
 
-	    if (!String.IsNullOrEmpty(options.ConfigurationFilePath))
+            if (!String.IsNullOrEmpty(options.ConfigurationFilePath))
+            {
                 Config = ConfigurationFile.ReadFromPath(options.ConfigurationFilePath);
+            }
             else
+            {
                 Config = ConfigurationFile.ReadDefault();
+            }
             Config.Quiet = options.Quiet;
+
+            if (!string.IsNullOrEmpty(Config.LogFilePath))
+            {
+                LogWriter = new LogFileWriter(Config.LogFilePath);
+            }
 
             ITemperatureReader reader = GetTemperatureReader(Config);
             IDataRecorder recorder = GetDataRecorder(Config);
@@ -58,6 +69,11 @@
                 Console.WriteLine(message);
             else
                 System.Diagnostics.Debug.WriteLine(message);
+
+            if (null != LogWriter)
+            {
+                LogWriter.LogMessage(message);
+            }
         }
 
         private static IDataRecorder GetDataRecorder(ConfigurationFile config)
