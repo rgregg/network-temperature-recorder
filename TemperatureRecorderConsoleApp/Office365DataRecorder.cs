@@ -97,7 +97,7 @@ namespace TemperatureRecorderConsoleApp
 
             var result = await ParseResponseAsync<GraphItem>(response);
 
-            if (null != response && !string.IsNullOrEmpty(result.Id))
+            if (null != result && !string.IsNullOrEmpty(result.Id))
                 return result.Id;
 
             return null;
@@ -108,10 +108,23 @@ namespace TemperatureRecorderConsoleApp
             return new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
         }
 
-        public async Task<T> ParseResponseAsync<T>(HttpResponseMessage response)
+        public async Task<T> ParseResponseAsync<T>(HttpResponseMessage response) where T : class
         {
-            string data = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(data);
+            string data = null;
+            try
+            {
+                data = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<T>(data);
+            }
+            catch (Exception ex)
+            {
+                Program.LogMessage("Unable to deserialize JSON response data: " + ex.Message);
+                if (null != data)
+                {
+                    Program.LogMessage("Received data: " + data);
+                }
+                return default(T);
+            }
         }
 
         private Uri BaseUri
