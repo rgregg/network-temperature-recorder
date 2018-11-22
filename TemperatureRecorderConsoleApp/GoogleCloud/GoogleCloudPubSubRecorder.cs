@@ -1,18 +1,20 @@
-﻿using Google.Cloud.PubSub.V1;
-using Grpc.Core;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http;
+using Google.Apis.Auth.OAuth2;
 
 namespace TemperatureRecorderConsoleApp.GoogleCloud
 {
     public class GoogleCloudPubSubRecorder : IDataRecorder
     {
         private readonly GoogleCloudConfig config;
-        private PublisherClient publisherClient;
+
+        private GoogleCredential credential;
+        private HttpClient httpClient;
         public GoogleCloudPubSubRecorder(GoogleCloudConfig config)
         {
             this.config = config;
@@ -26,47 +28,9 @@ namespace TemperatureRecorderConsoleApp.GoogleCloud
                 Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", config.AuthorizationTokenPath);
             }
 
-            Program.LogMessage("Creating PublisherServiceApiClient");
-            PublisherServiceApiClient publisher = PublisherServiceApiClient.Create();
-
-            Program.LogMessage("Creating topic " + config.PubSubTopicName + "...");
-            TopicName topicName = new TopicName(config.GoogleCloudProjectId, config.PubSubTopicName);
-            try
-            {
-                await publisher.CreateTopicAsync(topicName);
-                Program.LogMessage("Topic created.");
-            }
-            catch (RpcException e)
-            {
-                if (e.Status.StatusCode == StatusCode.AlreadyExists)
-                {
-                    // Already exists.  That's fine.
-                    Program.LogMessage("Topic already exists.");
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            Program.LogMessage("Creating PubSub publisher...");
-            publisherClient = await GetPublisherAsync(config.GoogleCloudProjectId, config.PubSubTopicName);
+            this.credential = GoogleCredential.GetApplicationDefault();
 
             await base.InitalizeAsync();
-        }
-
-        private async Task<PublisherClient> GetPublisherAsync(string projectId, string topicId)
-        {
-            return await PublisherClient.CreateAsync(
-                new TopicName(projectId, topicId), 
-                null,
-                new PublisherClient.Settings
-                {
-                    BatchingSettings = new Google.Api.Gax.BatchingSettings(
-                        elementCountThreshold: 100,
-                        byteCountThreshold: 10240,
-                        delayThreshold: TimeSpan.FromSeconds(3))
-                });
         }
 
         public override async Task RecordDataAsync(TemperatureData data)
@@ -77,12 +41,91 @@ namespace TemperatureRecorderConsoleApp.GoogleCloud
 
             try
             {
-                await publisherClient.PublishAsync(Convert.ToBase64String(bytes));
+                await PublishMessageAsync(Convert.ToBase64String(bytes));
             }
             catch (Exception ex)
             {
                 Program.LogMessage("Unable to record temperature to PubSub topic " + config.PubSubTopicName + ": " + ex);
             }
+        }
+
+        private HttpClient GetHttpClient()
+        {
+            if (this.httpClient != null)
+                return this.httpClient;
+
+            var client = new HttpClient();
+
+            // TODO: Add any configuration here
+
+            this.httpClient = client;
+            return client;
+        }
+
+        private Task PublishMessageAsync(string message) 
+        {
+            return PublishMessagesAsync(new string[] { message });
+        }
+
+        private async Task PublishMessagesAsync(string[] messages) 
+        {
+            var accessToken = await this.credential.UnderlyingCredential.GetAccessTokenForRequestAsync();
+
+            var project_url = Uri.EscapeUriString(config.GoogleCloudProjectId);
+            var topic_url = Uri.EscapeUriString(config.PubSubTopicName);
+
+            var requestUri = "https://pubsub.googleapis.com/v1/projects/" + project_url + "/topics/" + topic_url + ":publish";
+
+            var client = GetHttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, requestUri);
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+
+            var body = new PubSubPublishBody();
+            body.Messages = new List<PubSubMessage>();
+            body.Messages.AddRange(from m in messages select new PubSubMessage() { Data = m });
+            request.Content = GetJsonObjectContent(body);
+
+            try 
+            {
+                var response = await client.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var responseBody = await response.Content.ReadAsStringAsync();
+                    Program.LogMessage("Error publishing message: " + responseBody);
+                }
+            }
+            catch (Exception ex)
+            {
+                Program.LogMessage("Exception occured while uploading: " + ex.Message);
+                Program.LogMessage(ex.ToString());
+            }
+        }
+
+        private StringContent GetJsonObjectContent(object obj)
+        {
+            return new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
+        }
+
+        private class PubSubPublishBody {
+
+            [JsonProperty("messages")]
+            public List<PubSubMessage> Messages { get; set; }
+        }
+
+        private class PubSubMessage 
+        {
+            [JsonProperty("data")]
+            public string Data { get; set; }
+            
+            [JsonProperty("messageId")]
+            public string MessageId { get; set; }
+            
+            [JsonProperty("publishTime")]
+            public DateTimeOffset PublishTime { get; set; }
+
+            [JsonProperty("attributes")]
+            public Dictionary<string, string> Attributes { get; set; }
         }
     }
 }
