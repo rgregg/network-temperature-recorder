@@ -28,7 +28,7 @@ namespace TemperatureRecorderConsoleApp.GoogleCloud
                 Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", config.AuthorizationTokenPath);
             }
 
-            this.credential = GoogleCredential.GetApplicationDefault();
+            this.credential = GoogleCredential.GetApplicationDefault().CreateScoped("https://www.googleapis.com/auth/pubsub");
 
             await base.InitalizeAsync();
         }
@@ -69,6 +69,7 @@ namespace TemperatureRecorderConsoleApp.GoogleCloud
 
         private async Task PublishMessagesAsync(string[] messages) 
         {
+            
             var accessToken = await this.credential.UnderlyingCredential.GetAccessTokenForRequestAsync();
 
             var project_url = Uri.EscapeUriString(config.GoogleCloudProjectId);
@@ -89,9 +90,9 @@ namespace TemperatureRecorderConsoleApp.GoogleCloud
             try 
             {
                 var response = await client.SendAsync(request);
+                var responseBody = await response.Content.ReadAsStringAsync();
                 if (!response.IsSuccessStatusCode)
-                {
-                    var responseBody = await response.Content.ReadAsStringAsync();
+                {                    
                     Program.LogMessage("Error publishing message: " + responseBody);
                 }
             }
