@@ -32,7 +32,7 @@ namespace TemperatureRecorderConsoleApp.MicrosoftGraph
            };
         }
 
-        public async Task RecordDataAsync(TemperatureData data)
+        public override async Task RecordDataAsync(TemperatureData data)
         {
             var haveAccessToken = await RetrieveAccessToken();
             if (!haveAccessToken)

@@ -15,6 +15,7 @@ It is designed to be run from an embedded device, like a Raspberry Pi, and left 
 
 * [OneDrive for Business / Office 365](#onedrive-for-business-configuration)
 * Console output
+* [Google Cloud PubSub](#google-cloud-pubsub-configuration)
 
 ## One Wire Hardware Configuration
 
@@ -45,6 +46,19 @@ The name of the column is not important, only that they are in the correct order
 
 See [ExampleData](ExampleData.xlsx) for an example of the required file format.
 
+## Google Cloud PubSub Configuration
+
+To use temperature-recorder with Google Cloud PubSub, first you will need to create
+a Google Cloud project and decide on a PubSub topic name.
+
+You can use the [PubSub Quickstart](https://cloud.google.com/pubsub/docs/quickstart-cli) to 
+quickly setup a GCP Project.
+
+Data is pushed to PubSub with the date_time_utc, device, temp_c, and temp_f values
+encoded in a JSON string, which is base64 encoded.
+Subscribers to the PubSub topic can decode this data and choose to record the information
+however the subscriber desires.
+
 ## Configuration File
 
 The temperature recorder app looks for a default configuration file at `~/.iotTempRecorder.rc`.
@@ -53,7 +67,7 @@ The format of this file is a JSON dictionary that can contain the following prop
 | Name | Value | Description |
 |---|---|---|
 | TemperaturePollingIntervalSeconds | Int32 | The number of seconds to wait between capturing a temperature data point. Default: 60. |
-| DataRecorder | String | Specify the data recorder to use. Allowed values are `Console` and `Office365`. |
+| DataRecorder | String | Specify the data recorder to use. Allowed values are `Console`, `Office365`, and `GoogleCloudPubSub`. |
 | TemperatureSource | String | Specify the source of temperature readings. Allowed values are `OneWire` or `Simulator`. |
 | CloudDataFilePath | String | Specify the relative path to an Excel file that will be updated with the recorded values. |
 | Office365UserName | String | The username for the Office 365 account. |
@@ -61,8 +75,11 @@ The format of this file is a JSON dictionary that can contain the following prop
 | Office365ClientId | String | The client ID (guid) for the application registered with Azure Active Directory. |
 | Office365TokenService | String | The token authority for authentication. Should specify `https://login.microsoftonline.com/common`. |
 | Office365ResourceUrl | String | The resource URI to generate tokens for. Should specify `https://graph.microsoft.com`. |
+| AuthorizationToken | String | Google Cloud authorization blob (base64 encoded). |
+| GoogleCloudProjectId | String | Project ID (not Project Name) for your Google Cloud project. |
+| PubSubTopicName | String | The topic to which temperature messages are published. The topic will be created if it does not exist. |
 
-### Example configuration file
+### Example configuration file for Office 365
 
 ```json
 {
@@ -75,6 +92,19 @@ The format of this file is a JSON dictionary that can contain the following prop
 "Office365ResourceUrl": "https://graph.microsoft.com",
 "DataRecorder": "Office365",
 "TemperatureSource": "OneWire"
+}
+```
+
+### Example configuration file for Google Cloud Pub Sub
+
+```json
+{
+"TemperaturePollingIntervalSeconds": 60,
+"DataRecorder": "GoogleCloudPubSub",
+"TemperatureSource": "OneWire",
+"AuthorizationToken": "base64-encoded-service-token",
+"GoogleCloudProjectId": "project-foo-12345",
+"PubSubTopicName": "topic1"
 }
 ```
 

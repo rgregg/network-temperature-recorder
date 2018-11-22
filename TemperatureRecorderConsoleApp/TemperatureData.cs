@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,13 @@ namespace TemperatureRecorderConsoleApp
 {
     public class TemperatureData
     {
+        [JsonProperty("date_time_utc")]
         public DateTimeOffset InstanceDateTime { get; private set; }
+        [JsonProperty("device")]
         public string DeviceIdentifier { get; private set; }
+        [JsonProperty("temp_c")]
         public double TemperatureC { get; private set; }
+        [JsonProperty("temp_f")]
         public double TemperatureF
         {
             get

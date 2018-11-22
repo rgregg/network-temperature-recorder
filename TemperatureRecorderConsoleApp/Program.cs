@@ -2,18 +2,48 @@
 {
     using System;
     using CommandLine;
+    using System.Threading.Tasks;
+    using Nito.AsyncEx.Synchronous;
+    using Nito.AsyncEx;
 
     class Program
     {
         private static ConfigurationFile Config;
         private static LogFileWriter LogWriter;
+        private static bool KeepRunning = true;
 
         static void Main(string[] args)
+        {
+            Console.CancelKeyPress += delegate (object sender, ConsoleCancelEventArgs e) {
+                Program.LogMessage("Exit request received...");
+                e.Cancel = true;
+                Program.KeepRunning = false;
+                Environment.Exit(-1);
+            };
+
+            var task = MainAsync(args);
+            try
+            {
+                task.WaitAndUnwrapException();
+            }
+            catch (Exception ex)
+            {
+                Program.LogMessage($"An exception occured: {ex}");
+            }
+
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                Console.WriteLine("Press return to exit.");
+                Console.ReadLine();
+            }
+        }
+
+        static async Task MainAsync(string[] args) 
         {
             var options = new CommandLineArgs();
             if (!Parser.Default.ParseArguments(args, options))
             {
-                Program.LogMessage("Unable to parse command line options.");
+                Program.LogMessage("Unable to parse command line options. Exiting.");
                 return;
             }
 
@@ -32,17 +62,28 @@
                 LogWriter = new LogFileWriter(Config.LogFilePath);
             }
 
-            ITemperatureReader reader = GetTemperatureReader(Config);
-            IDataRecorder recorder = GetDataRecorder(Config);
+            ITemperatureReader reader = null;
+            IDataRecorder recorder = null;
+            try
+            {
+                reader = GetTemperatureReader(Config);
+                recorder = await GetDataRecorderAsync(Config);
+            } catch (Exception ex)
+            {
+                Program.LogMessage($"Failed to create required dependencies: {ex.Message}. Exiting.");
+                return;
+            }
 
             var probes = reader.EnumerateDevices();
             if (probes.Length == 0)
             {
-                Program.LogMessage("Unable to locate any devices. Aborting.");
+                Program.LogMessage("Unable to locate any devices. Exiting.");
                 return;
             }
 
-            while (true)
+            Program.LogMessage($"Collecting temperatures every {Config.TemperaturePollingIntervalSeconds} seconds.");
+
+            while (Program.KeepRunning)
             {
                 foreach (var probe in probes)
                 {
@@ -51,7 +92,7 @@
                         var data = reader.GetAverageValueFromDevice(probe, 5);
                         if (null != data)
                         {
-                            recorder.RecordDataAsync(data);
+                            await recorder.RecordDataAsync(data);
                         }
                     }
                     catch (Exception ex)
@@ -76,7 +117,7 @@
             }
         }
 
-        private static IDataRecorder GetDataRecorder(ConfigurationFile config)
+        private static async Task<IDataRecorder> GetDataRecorderAsync(ConfigurationFile config)
         {
             IDataRecorder recorder;
             switch (config.DataRecorder)
@@ -87,9 +128,13 @@
                 case ConfigurationFile.DataRecorderServices.Office365:
                     recorder = new MicrosoftGraph.Office365DataRecorder((MicrosoftGraph.MicrosoftGraphConfig)config);
                     break;
+                case ConfigurationFile.DataRecorderServices.GoogleCloudPubSub:
+                    recorder = new GoogleCloud.GoogleCloudPubSubRecorder((GoogleCloud.GoogleCloudConfig)config);
+                    break;
                 default:
-                    throw new NotSupportedException("DataRecorder value not supported.");
+                    throw new NotSupportedException($"DataRecorder value '{config.DataRecorder}' is not supported. Expected values are 'Console', 'Office365' or 'GoogleCloudPubSub'.");
             }
+            await recorder.InitalizeAsync();
 
             return recorder;
         }
@@ -106,7 +151,7 @@
                     reader = new ProbeSimulator();
                     break;
                 default:
-                    throw new NotSupportedException("TemperatureSource value not supported.");
+                    throw new NotSupportedException($"TemperatureSource value '{config.TemperatureSource}' is not supported. Expected values are 'OneWire' or 'Simulator'.");
             }
 
             return reader;

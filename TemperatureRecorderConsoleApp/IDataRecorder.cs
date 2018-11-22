@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace TemperatureRecorderConsoleApp
 {
-    interface IDataRecorder
+    public abstract class IDataRecorder
     {
-        Task RecordDataAsync(TemperatureData data);
+        public virtual Task InitalizeAsync()
+        {
+            return Task.FromResult<bool>(true);
+        }
+
+        public abstract Task RecordDataAsync(TemperatureData data);
     }
 }
