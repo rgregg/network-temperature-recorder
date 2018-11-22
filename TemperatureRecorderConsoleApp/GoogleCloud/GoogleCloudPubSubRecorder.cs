@@ -37,10 +37,16 @@ namespace TemperatureRecorderConsoleApp.GoogleCloud
                 Program.LogMessage("Topic created.");
             }
             catch (RpcException e)
-            when (e.Status.StatusCode == StatusCode.AlreadyExists)
             {
-                // Already exists.  That's fine.
-                Program.LogMessage("Topic already exists.");
+                if (e.Status.StatusCode == StatusCode.AlreadyExists)
+                {
+                    // Already exists.  That's fine.
+                    Program.LogMessage("Topic already exists.");
+                }
+                else
+                {
+                    throw;
+                }
             }
 
             Program.LogMessage("Creating PubSub publisher...");
