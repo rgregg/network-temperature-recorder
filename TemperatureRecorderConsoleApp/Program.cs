@@ -70,7 +70,7 @@
                 recorder = await GetDataRecorderAsync(Config);
             } catch (Exception ex)
             {
-                Program.LogMessage("Failed to create required dependencies: " + ex.Message + ". Exiting.");
+                Program.LogMessage("Failed to create required dependencies: " + ex.ToString() + ". Exiting.");
                 return;
             }
 
