@@ -1,0 +1,519 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Google.Cloud.Iam.V1</name>
+    </assembly>
+    <members>
+        <member name="T:Google.Cloud.Iam.V1.IamPolicyReflection">
+            <summary>Holder for reflection information generated from google/iam/v1/iam_policy.proto</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.IamPolicyReflection.Descriptor">
+            <summary>File descriptor for google/iam/v1/iam_policy.proto</summary>
+        </member>
+        <member name="T:Google.Cloud.Iam.V1.SetIamPolicyRequest">
+            <summary>
+            Request message for `SetIamPolicy` method.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.SetIamPolicyRequest.ResourceFieldNumber">
+            <summary>Field number for the "resource" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.SetIamPolicyRequest.Resource">
+            <summary>
+            REQUIRED: The resource for which the policy is being specified.
+            `resource` is usually specified as a path. For example, a Project
+            resource is specified as `projects/{project}`.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.SetIamPolicyRequest.PolicyFieldNumber">
+            <summary>Field number for the "policy" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.SetIamPolicyRequest.Policy">
+            <summary>
+            REQUIRED: The complete policy to be applied to the `resource`. The size of
+            the policy is limited to a few 10s of KB. An empty policy is a
+            valid policy but certain Cloud Platform services (such as Projects)
+            might reject them.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Iam.V1.GetIamPolicyRequest">
+            <summary>
+            Request message for `GetIamPolicy` method.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.GetIamPolicyRequest.ResourceFieldNumber">
+            <summary>Field number for the "resource" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.GetIamPolicyRequest.Resource">
+            <summary>
+            REQUIRED: The resource for which the policy is being requested.
+            `resource` is usually specified as a path. For example, a Project
+            resource is specified as `projects/{project}`.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Iam.V1.TestIamPermissionsRequest">
+            <summary>
+            Request message for `TestIamPermissions` method.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.TestIamPermissionsRequest.ResourceFieldNumber">
+            <summary>Field number for the "resource" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.TestIamPermissionsRequest.Resource">
+            <summary>
+            REQUIRED: The resource for which the policy detail is being requested.
+            `resource` is usually specified as a path. For example, a Project
+            resource is specified as `projects/{project}`.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.TestIamPermissionsRequest.PermissionsFieldNumber">
+            <summary>Field number for the "permissions" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.TestIamPermissionsRequest.Permissions">
+            <summary>
+            The set of permissions to check for the `resource`. Permissions with
+            wildcards (such as '*' or 'storage.*') are not allowed. For more
+            information see
+            [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Iam.V1.TestIamPermissionsResponse">
+            <summary>
+            Response message for `TestIamPermissions` method.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.TestIamPermissionsResponse.PermissionsFieldNumber">
+            <summary>Field number for the "permissions" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.TestIamPermissionsResponse.Permissions">
+            <summary>
+            A subset of `TestPermissionsRequest.permissions` that the caller is
+            allowed.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Iam.V1.IAMPolicy">
+             <summary>
+             ## API Overview
+            
+             Manages Identity and Access Management (IAM) policies.
+            
+             Any implementation of an API that offers access control features
+             implements the google.iam.v1.IAMPolicy interface.
+            
+             ## Data model
+            
+             Access control is applied when a principal (user or service account), takes
+             some action on a resource exposed by a service. Resources, identified by
+             URI-like names, are the unit of access control specification. Service
+             implementations can choose the granularity of access control and the
+             supported permissions for their resources.
+             For example one database service may allow access control to be
+             specified only at the Table level, whereas another might allow access control
+             to also be specified at the Column level.
+            
+             ## Policy Structure
+            
+             See google.iam.v1.Policy
+            
+             This is intentionally not a CRUD style API because access control policies
+             are created and deleted implicitly with the resources to which they are
+             attached.
+             </summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.IAMPolicy.Descriptor">
+            <summary>Service descriptor</summary>
+        </member>
+        <member name="T:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyBase">
+            <summary>Base class for server-side implementations of IAMPolicy</summary>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyBase.SetIamPolicy(Google.Cloud.Iam.V1.SetIamPolicyRequest,Grpc.Core.ServerCallContext)">
+            <summary>
+            Sets the access control policy on the specified resource. Replaces any
+            existing policy.
+            </summary>
+            <param name="request">The request received from the client.</param>
+            <param name="context">The context of the server-side call handler being invoked.</param>
+            <returns>The response to send back to the client (wrapped by a task).</returns>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyBase.GetIamPolicy(Google.Cloud.Iam.V1.GetIamPolicyRequest,Grpc.Core.ServerCallContext)">
+            <summary>
+            Gets the access control policy for a resource.
+            Returns an empty policy if the resource exists and does not have a policy
+            set.
+            </summary>
+            <param name="request">The request received from the client.</param>
+            <param name="context">The context of the server-side call handler being invoked.</param>
+            <returns>The response to send back to the client (wrapped by a task).</returns>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyBase.TestIamPermissions(Google.Cloud.Iam.V1.TestIamPermissionsRequest,Grpc.Core.ServerCallContext)">
+            <summary>
+            Returns permissions that a caller has on the specified resource.
+            If the resource does not exist, this will return an empty set of
+            permissions, not a NOT_FOUND error.
+            </summary>
+            <param name="request">The request received from the client.</param>
+            <param name="context">The context of the server-side call handler being invoked.</param>
+            <returns>The response to send back to the client (wrapped by a task).</returns>
+        </member>
+        <member name="T:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient">
+            <summary>Client for IAMPolicy</summary>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.#ctor(Grpc.Core.Channel)">
+            <summary>Creates a new client for IAMPolicy</summary>
+            <param name="channel">The channel to use to make remote calls.</param>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.#ctor(Grpc.Core.CallInvoker)">
+            <summary>Creates a new client for IAMPolicy that uses a custom <c>CallInvoker</c>.</summary>
+            <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.#ctor">
+            <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.#ctor(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Protected constructor to allow creation of configured clients.</summary>
+            <param name="configuration">The client configuration.</param>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.SetIamPolicy(Google.Cloud.Iam.V1.SetIamPolicyRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
+            <summary>
+            Sets the access control policy on the specified resource. Replaces any
+            existing policy.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+            <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+            <param name="cancellationToken">An optional token for canceling the call.</param>
+            <returns>The response received from the server.</returns>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.SetIamPolicy(Google.Cloud.Iam.V1.SetIamPolicyRequest,Grpc.Core.CallOptions)">
+            <summary>
+            Sets the access control policy on the specified resource. Replaces any
+            existing policy.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="options">The options for the call.</param>
+            <returns>The response received from the server.</returns>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.SetIamPolicyAsync(Google.Cloud.Iam.V1.SetIamPolicyRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
+            <summary>
+            Sets the access control policy on the specified resource. Replaces any
+            existing policy.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+            <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+            <param name="cancellationToken">An optional token for canceling the call.</param>
+            <returns>The call object.</returns>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.SetIamPolicyAsync(Google.Cloud.Iam.V1.SetIamPolicyRequest,Grpc.Core.CallOptions)">
+            <summary>
+            Sets the access control policy on the specified resource. Replaces any
+            existing policy.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="options">The options for the call.</param>
+            <returns>The call object.</returns>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.GetIamPolicy(Google.Cloud.Iam.V1.GetIamPolicyRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
+            <summary>
+            Gets the access control policy for a resource.
+            Returns an empty policy if the resource exists and does not have a policy
+            set.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+            <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+            <param name="cancellationToken">An optional token for canceling the call.</param>
+            <returns>The response received from the server.</returns>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.GetIamPolicy(Google.Cloud.Iam.V1.GetIamPolicyRequest,Grpc.Core.CallOptions)">
+            <summary>
+            Gets the access control policy for a resource.
+            Returns an empty policy if the resource exists and does not have a policy
+            set.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="options">The options for the call.</param>
+            <returns>The response received from the server.</returns>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.GetIamPolicyAsync(Google.Cloud.Iam.V1.GetIamPolicyRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
+            <summary>
+            Gets the access control policy for a resource.
+            Returns an empty policy if the resource exists and does not have a policy
+            set.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+            <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+            <param name="cancellationToken">An optional token for canceling the call.</param>
+            <returns>The call object.</returns>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.GetIamPolicyAsync(Google.Cloud.Iam.V1.GetIamPolicyRequest,Grpc.Core.CallOptions)">
+            <summary>
+            Gets the access control policy for a resource.
+            Returns an empty policy if the resource exists and does not have a policy
+            set.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="options">The options for the call.</param>
+            <returns>The call object.</returns>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.TestIamPermissions(Google.Cloud.Iam.V1.TestIamPermissionsRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
+            <summary>
+            Returns permissions that a caller has on the specified resource.
+            If the resource does not exist, this will return an empty set of
+            permissions, not a NOT_FOUND error.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+            <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+            <param name="cancellationToken">An optional token for canceling the call.</param>
+            <returns>The response received from the server.</returns>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.TestIamPermissions(Google.Cloud.Iam.V1.TestIamPermissionsRequest,Grpc.Core.CallOptions)">
+            <summary>
+            Returns permissions that a caller has on the specified resource.
+            If the resource does not exist, this will return an empty set of
+            permissions, not a NOT_FOUND error.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="options">The options for the call.</param>
+            <returns>The response received from the server.</returns>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.TestIamPermissionsAsync(Google.Cloud.Iam.V1.TestIamPermissionsRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
+            <summary>
+            Returns permissions that a caller has on the specified resource.
+            If the resource does not exist, this will return an empty set of
+            permissions, not a NOT_FOUND error.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+            <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+            <param name="cancellationToken">An optional token for canceling the call.</param>
+            <returns>The call object.</returns>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.TestIamPermissionsAsync(Google.Cloud.Iam.V1.TestIamPermissionsRequest,Grpc.Core.CallOptions)">
+            <summary>
+            Returns permissions that a caller has on the specified resource.
+            If the resource does not exist, this will return an empty set of
+            permissions, not a NOT_FOUND error.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="options">The options for the call.</param>
+            <returns>The call object.</returns>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyClient.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.IAMPolicy.BindService(Google.Cloud.Iam.V1.IAMPolicy.IAMPolicyBase)">
+            <summary>Creates service definition that can be registered with a server</summary>
+            <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+        </member>
+        <member name="T:Google.Cloud.Iam.V1.PolicyReflection">
+            <summary>Holder for reflection information generated from google/iam/v1/policy.proto</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.PolicyReflection.Descriptor">
+            <summary>File descriptor for google/iam/v1/policy.proto</summary>
+        </member>
+        <member name="T:Google.Cloud.Iam.V1.Policy">
+             <summary>
+             Defines an Identity and Access Management (IAM) policy. It is used to
+             specify access control policies for Cloud Platform resources.
+            
+             A `Policy` consists of a list of `bindings`. A `Binding` binds a list of
+             `members` to a `role`, where the members can be user accounts, Google groups,
+             Google domains, and service accounts. A `role` is a named list of permissions
+             defined by IAM.
+            
+             **Example**
+            
+                 {
+                   "bindings": [
+                     {
+                       "role": "roles/owner",
+                       "members": [
+                         "user:mike@example.com",
+                         "group:admins@example.com",
+                         "domain:google.com",
+                         "serviceAccount:my-other-app@appspot.gserviceaccount.com",
+                       ]
+                     },
+                     {
+                       "role": "roles/viewer",
+                       "members": ["user:sean@example.com"]
+                     }
+                   ]
+                 }
+            
+             For a description of IAM and its features, see the
+             [IAM developer's guide](https://cloud.google.com/iam).
+             </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.Policy.VersionFieldNumber">
+            <summary>Field number for the "version" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.Policy.Version">
+            <summary>
+            Version of the `Policy`. The default version is 0.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.Policy.BindingsFieldNumber">
+            <summary>Field number for the "bindings" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.Policy.Bindings">
+            <summary>
+            Associates a list of `members` to a `role`.
+            Multiple `bindings` must not be specified for the same `role`.
+            `bindings` with no members will result in an error.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.Policy.EtagFieldNumber">
+            <summary>Field number for the "etag" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.Policy.Etag">
+             <summary>
+             `etag` is used for optimistic concurrency control as a way to help
+             prevent simultaneous updates of a policy from overwriting each other.
+             It is strongly suggested that systems make use of the `etag` in the
+             read-modify-write cycle to perform policy updates in order to avoid race
+             conditions: An `etag` is returned in the response to `getIamPolicy`, and
+             systems are expected to put that etag in the request to `setIamPolicy` to
+             ensure that their change will be applied to the same version of the policy.
+            
+             If no `etag` is provided in the call to `setIamPolicy`, then the existing
+             policy is overwritten blindly.
+             </summary>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.Policy.AddRoleMember(System.String,System.String)">
+            <summary>
+            Adds the specified member to the specified role. If the role does
+            not already exist, it is created.
+            </summary>
+            <param name="role">The role to add the member to. Must not be null or empty.</param>
+            <param name="member">The member to add to the role. Must not be null or empty.</param>
+            <returns><c>true</c> if the policy was changed; <c>false</c> if the member already existed in the role.</returns>
+        </member>
+        <member name="M:Google.Cloud.Iam.V1.Policy.RemoveRoleMember(System.String,System.String)">
+            <summary>
+            Removes the specified member to the specified role, if they belong to it. If the role becomes empty after
+            removing the member, it is removed from the policy.
+            </summary>
+            <param name="role">The role to remove the member from. Must not be null or empty.</param>
+            <param name="member">The member to remove from the role. Must not be null or empty.</param>
+            <returns><c>true</c> if the policy was changed; <c>false</c> if the member didn't exist in the role
+            or the role didn't exist.</returns>
+        </member>
+        <member name="T:Google.Cloud.Iam.V1.Binding">
+            <summary>
+            Associates `members` with a `role`.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.Binding.RoleFieldNumber">
+            <summary>Field number for the "role" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.Binding.Role">
+            <summary>
+            Role that is assigned to `members`.
+            For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
+            Required
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.Binding.MembersFieldNumber">
+            <summary>Field number for the "members" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.Binding.Members">
+             <summary>
+             Specifies the identities requesting access for a Cloud Platform resource.
+             `members` can have the following values:
+            
+             * `allUsers`: A special identifier that represents anyone who is
+                on the internet; with or without a Google account.
+            
+             * `allAuthenticatedUsers`: A special identifier that represents anyone
+                who is authenticated with a Google account or a service account.
+            
+             * `user:{emailid}`: An email address that represents a specific Google
+                account. For example, `alice@gmail.com` or `joe@example.com`.
+            
+             * `serviceAccount:{emailid}`: An email address that represents a service
+                account. For example, `my-other-app@appspot.gserviceaccount.com`.
+            
+             * `group:{emailid}`: An email address that represents a Google group.
+                For example, `admins@example.com`.
+            
+             * `domain:{domain}`: A Google Apps domain name that represents all the
+                users of that domain. For example, `google.com` or `example.com`.
+             </summary>
+        </member>
+        <member name="T:Google.Cloud.Iam.V1.PolicyDelta">
+            <summary>
+            The difference delta between two policies.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.PolicyDelta.BindingDeltasFieldNumber">
+            <summary>Field number for the "binding_deltas" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.PolicyDelta.BindingDeltas">
+            <summary>
+            The delta for Bindings between two policies.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Iam.V1.BindingDelta">
+            <summary>
+            One delta entry for Binding. Each individual change (only one member in each
+            entry) to a binding will be a separate entry.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.BindingDelta.ActionFieldNumber">
+            <summary>Field number for the "action" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.BindingDelta.Action">
+            <summary>
+            The action that was performed on a Binding.
+            Required
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.BindingDelta.RoleFieldNumber">
+            <summary>Field number for the "role" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.BindingDelta.Role">
+            <summary>
+            Role that is assigned to `members`.
+            For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
+            Required
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.BindingDelta.MemberFieldNumber">
+            <summary>Field number for the "member" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Iam.V1.BindingDelta.Member">
+            <summary>
+            A single identity requesting access for a Cloud Platform resource.
+            Follows the same format of Binding.members.
+            Required
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Iam.V1.BindingDelta.Types">
+            <summary>Container for nested types declared in the BindingDelta message type.</summary>
+        </member>
+        <member name="T:Google.Cloud.Iam.V1.BindingDelta.Types.Action">
+            <summary>
+            The type of action performed on a Binding in a policy.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.BindingDelta.Types.Action.Unspecified">
+            <summary>
+            Unspecified.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.BindingDelta.Types.Action.Add">
+            <summary>
+            Addition of a Binding.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Iam.V1.BindingDelta.Types.Action.Remove">
+            <summary>
+            Removal of a Binding.
+            </summary>
+        </member>
+    </members>
+</doc>

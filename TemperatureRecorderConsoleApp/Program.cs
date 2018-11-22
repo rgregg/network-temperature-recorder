@@ -85,7 +85,7 @@
                     recorder = new ConsoleDataRecorder();
                     break;
                 case ConfigurationFile.DataRecorderServices.Office365:
-                    recorder = new Office365DataRecorder(config);
+                    recorder = new MicrosoftGraph.Office365DataRecorder((MicrosoftGraph.MicrosoftGraphConfig)config);
                     break;
                 default:
                     throw new NotSupportedException("DataRecorder value not supported.");
