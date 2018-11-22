@@ -75,7 +75,7 @@ The format of this file is a JSON dictionary that can contain the following prop
 | Office365ClientId | String | The client ID (guid) for the application registered with Azure Active Directory. |
 | Office365TokenService | String | The token authority for authentication. Should specify `https://login.microsoftonline.com/common`. |
 | Office365ResourceUrl | String | The resource URI to generate tokens for. Should specify `https://graph.microsoft.com`. |
-| AuthorizationToken | String | Google Cloud authorization blob (base64 encoded). |
+| AuthorizationTokenPath | String | Path to a Google Cloud service account private key. Optional. |
 | GoogleCloudProjectId | String | Project ID (not Project Name) for your Google Cloud project. |
 | PubSubTopicName | String | The topic to which temperature messages are published. The topic will be created if it does not exist. |
 
@@ -102,7 +102,7 @@ The format of this file is a JSON dictionary that can contain the following prop
 "TemperaturePollingIntervalSeconds": 60,
 "DataRecorder": "GoogleCloudPubSub",
 "TemperatureSource": "OneWire",
-"AuthorizationToken": "base64-encoded-service-token",
+"AuthorizationTokenPath": "path/to/service-account-key.json",
 "GoogleCloudProjectId": "project-foo-12345",
 "PubSubTopicName": "topic1"
 }

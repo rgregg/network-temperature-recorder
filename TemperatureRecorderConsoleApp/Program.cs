@@ -28,7 +28,7 @@
             }
             catch (Exception ex)
             {
-                Program.LogMessage($"An exception occured: {ex}");
+                Program.LogMessage("An exception occured: " + ex.ToString());
             }
 
             if (System.Diagnostics.Debugger.IsAttached)
@@ -70,7 +70,7 @@
                 recorder = await GetDataRecorderAsync(Config);
             } catch (Exception ex)
             {
-                Program.LogMessage($"Failed to create required dependencies: {ex.Message}. Exiting.");
+                Program.LogMessage($"Failed to create required dependencies: " + ex.Message + ". Exiting.");
                 return;
             }
 
@@ -81,7 +81,7 @@
                 return;
             }
 
-            Program.LogMessage($"Collecting temperatures every {Config.TemperaturePollingIntervalSeconds} seconds.");
+            Program.LogMessage($"Collecting temperatures every " + Config.TemperaturePollingIntervalSeconds + " seconds.");
 
             while (Program.KeepRunning)
             {
@@ -132,7 +132,7 @@
                     recorder = new GoogleCloud.GoogleCloudPubSubRecorder((GoogleCloud.GoogleCloudConfig)config);
                     break;
                 default:
-                    throw new NotSupportedException($"DataRecorder value '{config.DataRecorder}' is not supported. Expected values are 'Console', 'Office365' or 'GoogleCloudPubSub'.");
+                    throw new NotSupportedException($"DataRecorder value '" + config.DataRecorder + "' is not supported. Expected values are 'Console', 'Office365' or 'GoogleCloudPubSub'.");
             }
             await recorder.InitalizeAsync();
 
@@ -151,7 +151,7 @@
                     reader = new ProbeSimulator();
                     break;
                 default:
-                    throw new NotSupportedException($"TemperatureSource value '{config.TemperatureSource}' is not supported. Expected values are 'OneWire' or 'Simulator'.");
+                    throw new NotSupportedException($"TemperatureSource value '" + config.TemperatureSource + "' is not supported. Expected values are 'OneWire' or 'Simulator'.");
             }
 
             return reader;

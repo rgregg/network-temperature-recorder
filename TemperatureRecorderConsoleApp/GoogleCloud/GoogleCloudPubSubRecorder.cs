@@ -29,7 +29,7 @@ namespace TemperatureRecorderConsoleApp.GoogleCloud
             Program.LogMessage("Creating PublisherServiceApiClient");
             PublisherServiceApiClient publisher = PublisherServiceApiClient.Create();
 
-            Program.LogMessage($"Creating topic {config.PubSubTopicName}...");
+            Program.LogMessage("Creating topic " + config.PubSubTopicName + "...");
             TopicName topicName = new TopicName(config.GoogleCloudProjectId, config.PubSubTopicName);
             try
             {
@@ -65,7 +65,7 @@ namespace TemperatureRecorderConsoleApp.GoogleCloud
 
         public override async Task RecordDataAsync(TemperatureData data)
         {
-            Program.LogMessage($"Publishing temperature: {data.TemperatureF} @ {data.InstanceDateTime}.");
+            Program.LogMessage("Publishing temperature: " + data.TemperatureF + " @ " + data.InstanceDateTime + ".");
             var json = JsonConvert.SerializeObject(data, Formatting.None);
             var bytes = Encoding.Unicode.GetBytes(json);
 
@@ -75,7 +75,7 @@ namespace TemperatureRecorderConsoleApp.GoogleCloud
             }
             catch (Exception ex)
             {
-                Program.LogMessage($"Unable to record temperature to PubSub topic {config.PubSubTopicName}: {ex}");
+                Program.LogMessage("Unable to record temperature to PubSub topic " + config.PubSubTopicName + ": " + ex);
             }
         }
     }

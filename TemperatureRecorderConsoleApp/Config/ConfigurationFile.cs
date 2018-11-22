@@ -48,7 +48,7 @@ namespace TemperatureRecorderConsoleApp
         {
             if (!File.Exists(path))
             {
-                Program.LogMessage($"Couldn't find configuration file: '{path}'. Using default configuration.");
+                Program.LogMessage("Couldn't find configuration file: '" + path + "'. Using default configuration.");
                 return new ConfigurationFile();
             }
 
