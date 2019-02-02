@@ -45,7 +45,7 @@ namespace TemperatureRecorderConsoleApp.GoogleCloud
         {
             Program.LogMessage("Publishing temperature: " + data.TemperatureF + " @ " + data.InstanceDateTime + ".");
             var json = JsonConvert.SerializeObject(data, Formatting.None);
-            var bytes = Encoding.Unicode.GetBytes(json);
+            var bytes = Encoding.UTF8.GetBytes(json);
 
             try
             {
